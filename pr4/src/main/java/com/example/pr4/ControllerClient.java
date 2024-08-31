@@ -30,10 +30,11 @@ public class ControllerClient {
         log.info("Sending request stream");
         return rSocketRequester.route("responder-request-stream")
                 .retrieveFlux(MyData.class);
+        
     }
 
     @PostMapping(value = "/fire-forget")
-    public Mono<Void> sendFireForget(@RequestBody MyData data){
+    public Mono<Void> sendFireForget(@RequestBody MyData data) {
         log.info("Sending fire and forget");
         return rSocketRequester.route("responder-fire-forget")
                 .data(data)
@@ -41,7 +42,7 @@ public class ControllerClient {
     }
 
     @PostMapping(value = "/channel")
-    public Flux<MyData> sendChannel(@RequestBody List<MyData> data){
+    public Flux<MyData> sendChannel(@RequestBody List<MyData> data) {
         log.info("Sending channel");
 
         return rSocketRequester.route("responder-channel")
