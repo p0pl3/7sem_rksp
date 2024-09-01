@@ -8,7 +8,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
 public class Task3 {
-
     public static int calculateChecksum(String filePath) throws IOException {
         try (FileInputStream fis = new FileInputStream(filePath)) {
             byte[] buffer = new byte[1024];
@@ -24,7 +23,6 @@ public class Task3 {
             return checksum;
         }
     }
-
 
     private static int sum(ByteBuffer bb) {
         int sum = 0;
@@ -91,31 +89,28 @@ public class Task3 {
 
 
     public static void main(String[] args) {
-        String filePath = "src/pr2/QWE.txt"; // Замените на путь к вашему файлу
+        String filePath = "src/pr2/QWE.txt";
         try {
             int checksum = calculateChecksum(filePath);
             System.out.printf("16-битная контрольная сумма файла: 0x%04X%n", checksum);
-            System.out.println(checksum);
-            System.out.println(Integer.toHexString(checksum));
         } catch (IOException e) {
             e.printStackTrace();
         }
+//
+//        System.out.println("\n");
+//
+//        File f = new File(filePath);
+//        try {
+//            sum(f);
+//        } catch (IOException e) {
+//            System.err.println(f + ": " + e);
+//        }
 
-        System.out.println("\n");
-
-        File f = new File(filePath);
-        try {
-            sum(f);
-        } catch (IOException e) {
-            System.err.println(f + ": " + e);
-        }
-
-
-        try {
-            System.out.println("The verification code is:" + check_sum(filePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("An exception has occurred, exited!");
-        }
+//        try {
+//            System.out.println("контрольная сумма:" + check_sum(filePath));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.out.println("An exception has occurred, exited!");
+//        }
     }
 }

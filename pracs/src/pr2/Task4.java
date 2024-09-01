@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.file.*;
 
 public class Task4 {
-
     public static int calculateChecksum(String filePath) throws IOException {
         try (FileInputStream fis = new FileInputStream(filePath)) {
             byte[] buffer = new byte[1024];
@@ -101,8 +100,7 @@ public class Task4 {
     }
 
     public static void main(String[] args) {
-        Path path = Paths.get("E:/study/7sem/rksp/pracs/src/pr2"); // Замените на путь к вашему каталогу
-
+        Path path = Paths.get("E:/study/7sem/rksp/praccks/pracs/src/pr2"); // Замените на путь к вашему каталогу
         watchDirectory(path);
     }
 }

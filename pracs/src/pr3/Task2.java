@@ -47,12 +47,17 @@ class Task23 {
 
         // Создаем поток из 10 случайных чисел
         Observable<Integer> numbersStream = Observable.range(0, 10)
-                .map(i -> random.nextInt(100)); // Генерируем случайные числа от 0 до 99
+                .map(i -> {
+                    int k = random.nextInt(100);
+                    System.out.print(k + " ");
+                    return k;
+                }); // Генерируем случайные числа от 0 до 99
+
         // Удаляем первые три числа
         Observable<Integer> resultStream = numbersStream.skip(3); // Пропускаем первые 3 элемента
         System.out.println();
 
-        resultStream.subscribe(number -> System.out.print(number + " "));
+        resultStream.subscribe(System.out::println);
     }
 }
 

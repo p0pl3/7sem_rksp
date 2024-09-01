@@ -1,25 +1,52 @@
 package pr1;
 
-import java.util.Arrays;
 import java.util.concurrent.*;
 
 
 public class Task1 {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        int[] nums = new int[20];
-        for (int i = 0; i < 20; i++)
-            nums[i] = ((int) Math.floor(Math.random() * 100) + 1);
-        System.out.println(Arrays.toString(nums));
-        System.out.println(findMinConsistenly(nums));
-        System.out.println(findMinThreads(nums, 5));
-        System.out.println(findMinForkJoin(nums));
+        int[] nums = new int[10000];
+        for (int i = 0; i < nums.length; i++)
+            nums[i] = ((int) Math.floor(Math.random() * 10000) + 1);
+
+        long startTime, endTime;
+        Runtime runtime = Runtime.getRuntime();
+
+        runtime.gc();
+        long memoryBefore = runtime.totalMemory() - runtime.freeMemory();
+        startTime = System.currentTimeMillis();
+        int minNum = findMinSeq(nums);
+        endTime = System.currentTimeMillis();
+        long memoryAfter = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println("Последовательный метод\nМинимальный элемент: " + minNum + "\nВремя: " + (endTime - startTime) + " мс\nПамять: " + (memoryAfter - memoryBefore) + " байт\n");
+
+        runtime.gc();
+        memoryBefore = runtime.totalMemory() - runtime.freeMemory();
+        startTime = System.currentTimeMillis();
+        minNum = findMinThreads(nums, 20);
+        endTime = System.currentTimeMillis();
+        memoryAfter = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println("Многопоточный метод\nМинимальный элемент: " + minNum + "\nВремя: " + (endTime - startTime) + " мс\nПамять: " + (memoryAfter - memoryBefore) + " байт\n");
+
+        runtime.gc();
+        memoryBefore = runtime.totalMemory() - runtime.freeMemory();
+        startTime = System.currentTimeMillis();
+        minNum = findMinForkJoin(nums);
+        endTime = System.currentTimeMillis();
+        memoryAfter = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println("Метод ForkJoin\nМинимальный элемент: " + minNum + "\nВремя: " + (endTime - startTime) + " мс\nПамять: " + (memoryAfter - memoryBefore) + " байт\n");
     }
 
-    public static int findMinConsistenly(int[] nums) {
+    public static int findMinSeq(int[] nums) {
         int minNum = Integer.MAX_VALUE;
-        for (int i : nums){
+        for (int i : nums) {
             if (i < minNum) {
                 minNum = i;
+                try {
+                    Thread.sleep(1); // Задержка 1 мс
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
 
@@ -99,6 +126,4 @@ public class Task1 {
             }
         }
     }
-
-
 }

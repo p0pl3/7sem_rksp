@@ -40,8 +40,7 @@ class UserFriendService {
     }
 
     public Observable<UserFriend> getFriends(int userId) {
-        return Observable.fromArray(friends)
-                .filter(friend -> friend.getUserId() == userId);
+        return Observable.fromArray(friends).filter(friend -> friend.getUserId() == userId);
     }
 }
 

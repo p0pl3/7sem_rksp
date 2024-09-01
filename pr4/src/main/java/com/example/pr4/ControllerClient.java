@@ -30,7 +30,7 @@ public class ControllerClient {
         log.info("Sending request stream");
         return rSocketRequester.route("responder-request-stream")
                 .retrieveFlux(MyData.class);
-        
+
     }
 
     @PostMapping(value = "/fire-forget")

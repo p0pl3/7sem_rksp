@@ -1,2 +1,5 @@
-package com.bookstore.gateway;public class GatewayApplication {
+package com.bookstore.gateway;
+
+
+public class GatewayApplication {
 }

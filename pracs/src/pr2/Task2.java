@@ -14,33 +14,22 @@ public class Task2 {
         File sourceFile = new File("src/pr2/task2input.txt");
         File destFile = new File("src/pr2/task2output.txt");
 
-        long startTime = System.nanoTime();
+        destFile.delete();
+        long startTime = System.currentTimeMillis();
         copyFileStream(sourceFile, destFile);
-        long endTime = System.nanoTime();
+        long endTime = System.currentTimeMillis();
         System.out.println("Stream method time: " + (endTime - startTime) + " ns");
 
-        // Сбросить файл
         destFile.delete();
-
-        startTime = System.nanoTime();
+        startTime = System.currentTimeMillis();
         copyFileChannel(sourceFile, destFile);
-        endTime = System.nanoTime();
+        endTime = System.currentTimeMillis();
         System.out.println("Channel method time: " + (endTime - startTime) + " ns");
 
-        // Сбросить файл
-//        destFile.delete();
-//
-//        startTime = System.nanoTime();
-//        copyFileCommonsIO(sourceFile, destFile);
-//        endTime = System.nanoTime();
-//        System.out.println("Commons IO method time: " + (endTime - startTime) + " ns");
-
-        // Сбросить файл
         destFile.delete();
-
-        startTime = System.nanoTime();
+        startTime = System.currentTimeMillis();
         copyFileFilesClass(sourceFile, destFile);
-        endTime = System.nanoTime();
+        endTime = System.currentTimeMillis();
         System.out.println("Files class method time: " + (endTime - startTime) + " ns");
     }
 
@@ -64,14 +53,9 @@ public class Task2 {
         }
     }
 
-//    public static void copyFileCommonsIO(File source, File destination) throws IOException {
-//        FileUtils.copyFile(source, destination);
-//    }
-
     public static void copyFileFilesClass(File source, File destination) throws IOException {
         Path sourcePath = source.toPath();
         Path destPath = destination.toPath();
         Files.copy(sourcePath, destPath);
     }
-
 }
