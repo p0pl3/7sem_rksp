@@ -4,6 +4,7 @@ package pr1;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 class File {
     String type;
@@ -69,7 +70,8 @@ class FileProcessor extends Thread {
                     int processingTime = file.size * 7;
                     System.out.println("Обработка файла " + file + " ...");
                     Thread.sleep(processingTime); // Эмулируем время обработки в мс
-                    System.out.println("Файл " + file + " обработан.");
+                    System.out.println("Файл " + file + " обработан. Время обработки: "
+                            + processingTime + "мс.");
                 } else {
                     // Если тип файла не соответствует, возвращаем его обратно в очередь
                     fileQueue.put(file);
@@ -86,23 +88,22 @@ public class Task3 {
     private static final int MAX_QUEUE_SIZE = 5;
 
     public static void main(String[] args) {
-        BlockingQueue<File> fileQueue = new ArrayBlockingQueue<>(MAX_QUEUE_SIZE);
-
+        BlockingQueue<File> fileQueue = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
         // Создание генератора файлов
         FileGenerator generator = new FileGenerator(fileQueue);
-        generator.start();
-
         // Создание обработчиков для каждого типа файлов
         FileProcessor xmlProcessor = new FileProcessor(fileQueue, "XML");
         FileProcessor jsonProcessor = new FileProcessor(fileQueue, "JSON");
         FileProcessor xlsProcessor = new FileProcessor(fileQueue, "XLS");
+
+        generator.start();
         xmlProcessor.start();
         jsonProcessor.start();
         xlsProcessor.start();
 
         try {
             // Даем системе поработать некоторое время
-            Thread.sleep(10000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
