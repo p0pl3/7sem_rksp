@@ -110,7 +110,7 @@ public class Task1 {
         private final List<Integer> list;
         private final int start;
         private final int end;
-        private final static int THRESHOLD = 10; // Порог для деления задачи
+        private final static int THRESHOLD = 1000; // Порог для деления задачи
 
         public MinTask(List<Integer> list, int start, int end) {
             this.list = list;

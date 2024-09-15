@@ -14,11 +14,7 @@ import java.util.List;
 
 @Service
 public class FileService {
-
-
 //    private final String fileStorageLocation = System.getProperty("user.dir") + "/src/main/resources/static/images/";
-
-
     private final String fileStorageLocation = "/upload-files/";
 
     public FileService() {
@@ -42,7 +38,6 @@ public class FileService {
             files.add(fileEntry.getName());
         }
         return files;
-
     }
 }
 

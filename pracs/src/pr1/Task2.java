@@ -21,20 +21,13 @@ public class Task2 {
                     Thread.sleep(delay * 1000);
                     return number * number;
                 });
-                CompletableFuture<Integer> completableFuture = CompletableFuture.supplyAsync(() -> {
-                    try {
-                        return futureResult.get(); // Получаем результат из Future
-                    } catch (InterruptedException | ExecutionException e) {
-                        System.err.println("Ошибка вычисления: " + e.getMessage());
-                        return null;
-                    }
-                });
-
-                completableFuture.thenAccept(result -> {
-                    if (result != null) {
-                        System.out.println("Результат: " + result);
-                    }
-                });
+                try {
+                    int result = futureResult.get();
+                    System.out.println("Результат: " + result);
+                } catch (InterruptedException | ExecutionException e) {
+                    System.err.println("Ошибка при выполнении запроса: "
+                            + e.getMessage());
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Пожалуйста, введите корректное число.");
             }

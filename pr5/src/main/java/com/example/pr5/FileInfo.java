@@ -6,5 +6,4 @@ import lombok.Data;
 public class FileInfo {
     private String filename;
     private String url;
-
 }

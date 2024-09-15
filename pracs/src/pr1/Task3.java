@@ -75,7 +75,6 @@ class FileProcessor extends Thread {
                 } else {
                     // Если тип файла не соответствует, возвращаем его обратно в очередь
                     fileQueue.put(file);
-
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

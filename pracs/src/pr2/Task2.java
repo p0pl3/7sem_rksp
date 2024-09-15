@@ -1,12 +1,13 @@
 package pr2;
 
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import org.apache.commons.io.FileUtils;
 
 public class Task2 {
     public static void main(String[] args) throws IOException {
@@ -25,14 +26,6 @@ public class Task2 {
         endTime = System.currentTimeMillis();
         System.out.println("Channel method time: " + (endTime - startTime) + " ns");
 
-
-        destFile.delete();
-        startTime = System.currentTimeMillis();
-        copyUsingApacheCommonsIO(sourceFile, destFile);
-        endTime = System.currentTimeMillis();
-        System.out.println("Apache commons time: " + (endTime - startTime) + " ns");
-
-
         destFile.delete();
         startTime = System.currentTimeMillis();
         copyFileFilesClass(sourceFile, destFile);
@@ -41,30 +34,24 @@ public class Task2 {
     }
 
     public static void copyFileStream(File source, File destination) throws IOException {
-        FileInputStream fis = new FileInputStream(source);
-        FileOutputStream fos = new FileOutputStream(destination);
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        while ((bytesRead = fis.read(buffer)) != -1) {
-            fos.write(buffer, 0, bytesRead);
+        try (FileInputStream fis = new FileInputStream(source);
+             FileOutputStream fos = new FileOutputStream(destination)) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                fos.write(buffer, 0, bytesRead);
+            }
         }
-        fis.close();
-        fos.close();
     }
 
-    public static void copyFileChannel(File source, File destination) throws IOException {
-        FileChannel sourceChannel = new FileInputStream(source).getChannel();
-        FileChannel destChannel = new FileOutputStream(destination).getChannel();
-        destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-        sourceChannel.close();
-        destChannel.close();
-
+    public static void copyFileChannel(File source, File destination) {
+        try (FileChannel sourceChannel = new FileInputStream(source).getChannel();
+             FileChannel destChannel = new FileOutputStream(destination).getChannel()) {
+            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
     }
-
-    private static void copyUsingApacheCommonsIO(File source, File destination) throws IOException {
-        FileUtils.copyFile(source, destination);
-    }
-
 
     public static void copyFileFilesClass(File source, File destination) throws IOException {
         Path sourcePath = source.toPath();

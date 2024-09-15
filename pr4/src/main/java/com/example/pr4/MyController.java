@@ -39,8 +39,8 @@ public class MyController {
         return datas.doOnNext(myRepository::save);
     }
 
-    @MessageMapping("deleteData")
-    public Mono<Void> deleteCat(Long id) {
+    @MessageMapping("deleteData.{id}")
+    public Mono<Void> deleteCat(@DestinationVariable Long id) {
         MyData myData = myRepository.findMyDataById(id);
         myRepository.delete(myData);
         return Mono.empty();
