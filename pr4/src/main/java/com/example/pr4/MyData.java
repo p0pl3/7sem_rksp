@@ -21,4 +21,10 @@ public class MyData {
     private Integer amount;
     private Float price;
 
+
+    public MyData(String title, Integer amount, Float price) {
+        this.title = title;
+        this.amount = amount;
+        this.price = price;
+    }
 }

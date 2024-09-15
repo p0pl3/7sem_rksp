@@ -18,35 +18,40 @@ import java.util.concurrent.Flow;
 public class ControllerClient {
     private final RSocketRequester rSocketRequester;
 
-    @GetMapping("/request-response/{id}")
+    @GetMapping("/get_one/{id}")
     public Mono<MyData> sendRequestResponse(@PathVariable Long id) {
         log.info("Sending request / response");
         return rSocketRequester.route("responder-request-response.{id}", id)
                 .retrieveMono(MyData.class);
     }
 
-    @GetMapping("/request-stream")
+    @GetMapping("/get_all")
     public Flux<MyData> sendChannelStream() {
         log.info("Sending request stream");
         return rSocketRequester.route("responder-request-stream")
                 .retrieveFlux(MyData.class);
-
     }
 
-    @PostMapping(value = "/fire-forget")
-    public Mono<Void> sendFireForget(@RequestBody MyData data) {
+    @PostMapping(value = "/add_data")
+    public Mono<MyData> sendAddData(@RequestBody MyData data) {
         log.info("Sending fire and forget");
-        return rSocketRequester.route("responder-fire-forget")
+        return rSocketRequester.route("addData")
                 .data(data)
-                .send();
+                .retrieveMono(MyData.class);
     }
 
-    @PostMapping(value = "/channel")
+    @PostMapping(value = "/update_many")
     public Flux<MyData> sendChannel(@RequestBody List<MyData> data) {
         log.info("Sending channel");
 
         return rSocketRequester.route("responder-channel")
                 .data(Flux.fromIterable(data))
                 .retrieveFlux(MyData.class);
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public Mono<Void> deleteData(@PathVariable Long id){
+        return rSocketRequester.route("deleteData.{id}", id)
+                .send();
     }
 }

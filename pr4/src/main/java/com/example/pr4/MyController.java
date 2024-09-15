@@ -19,7 +19,7 @@ public class MyController {
     @MessageMapping("responder-request-response.{id}")
     public Mono<MyData> findById(@DestinationVariable Long id) {
         log.info("Request / Response");
-        return Mono.just(myRepository.findById(id).orElse(new MyData())).doOnNext(log::info);
+        return Mono.justOrEmpty(myRepository.findMyDataById(id)).doOnNext(log::info);
     }
 
     @MessageMapping("responder-request-stream")
@@ -27,11 +27,10 @@ public class MyController {
         return Flux.fromIterable(myRepository.findAll());
     }
 
-    @MessageMapping("responder-fire-forget")
-    public Mono<Void> create(MyData marketData) {
+    @MessageMapping("addData")
+    public Mono<MyData> create(MyData marketData) {
         log.info("Fire and Forget");
-        myRepository.save(marketData);
-        return Mono.empty();
+        return Mono.justOrEmpty(myRepository.save(marketData));
     }
 
     @MessageMapping("responder-channel")
@@ -40,7 +39,10 @@ public class MyController {
         return datas.doOnNext(myRepository::save);
     }
 
-
+    @MessageMapping("deleteData")
+    public Mono<Void> deleteCat(Long id) {
+        MyData myData = myRepository.findMyDataById(id);
+        myRepository.delete(myData);
+        return Mono.empty();
+    }
 }
-
-

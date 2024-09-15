@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MyRepository extends JpaRepository<MyData, Long> {
+    MyData findMyDataById(Long id);
 }
