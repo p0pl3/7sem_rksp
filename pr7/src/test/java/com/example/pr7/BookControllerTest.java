@@ -14,6 +14,9 @@ import reactor.core.publisher.Mono;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BookControllerTest {
+
+    @Autowired
+    private BookRepository bookRepository;
     @Autowired
     WebTestClient webClient;
 
@@ -29,7 +32,12 @@ class BookControllerTest {
 
     @Test
     void testGetBook() {
-        webClient.get().uri("/api/books/1")
+        Book newBook = new Book();
+        newBook.setAuthor("author1");
+        newBook.setTitle("title1");
+
+        Mono<Book> savedBook = bookRepository.save(newBook);
+        webClient.get().uri("/api/books/" + savedBook.block().getId())
                 .header(HttpHeaders.ACCEPT, "application/json")
                 .exchange()
                 .expectStatus().isOk()
@@ -58,12 +66,18 @@ class BookControllerTest {
 
     @Test
     void testUpdateBook() {
+
         Book newBook = new Book();
-        newBook.setId(1L);
+        newBook.setAuthor("author1");
+        newBook.setTitle("title1");
+
+        Mono<Book> savedBook = bookRepository.save(newBook);
+
         newBook.setAuthor("authorUpdate");
         newBook.setTitle("titleUpdate");
 
-        webClient.put().uri("/api/books/1")
+
+        webClient.put().uri("/api/books/" + savedBook.block().getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(newBook), Book.class)
@@ -79,14 +93,16 @@ class BookControllerTest {
     @Test
     void testDeleteBook() {
 
-        webClient.delete().uri("/api/books/1")
-                .exchange()
-                .expectStatus().isNoContent();
+        Book newBook = new Book();
+        newBook.setAuthor("author1");
+        newBook.setTitle("title1");
 
-        webClient.get().uri("/api/books/1")
-                .exchange()
-                .expectStatus().isNotFound();
+        Mono<Book> savedBook = bookRepository.save(newBook);
+        System.out.println(savedBook);
 
+        webClient.delete().uri("/api/books/" + savedBook.block().getId())
+                .exchange()
+                .expectStatus().isOk();
     }
 }
 
