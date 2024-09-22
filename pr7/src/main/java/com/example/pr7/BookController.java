@@ -28,7 +28,7 @@ public class BookController {
 
     @GetMapping
     public Flux<Book> getAllBooks() {
-        return bookService.getAllBooks();
+        return bookService.getAllBooks().onErrorResume(e -> Flux.error(new RuntimeException("Failed to fetch", e))).onBackpressureBuffer();
     }
 
     @GetMapping("/author/{author}")
